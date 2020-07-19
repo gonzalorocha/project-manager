@@ -12,9 +12,8 @@ const ListProject = () => {
     },[])
 
     if (projects.length === 0) {
-        return null;
+        return <p>No projects</p>;
     }
-    console.log(projects);
 
     return ( 
         <ul className="list-project">

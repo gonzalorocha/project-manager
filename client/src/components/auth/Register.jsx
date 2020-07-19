@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import {Link} from 'react-router-dom'
-
-
+import React, { useContext, useState } from "react";
+import {Link} from 'react-router-dom';
+import AlertContext from "./../../context/alert/alertContext";
 
 const Register = () => {
     const [ user, setUser ] = useState({
@@ -10,6 +9,9 @@ const Register = () => {
         password: '',
         confirm: ''
     })
+
+    const alertContext = useContext(AlertContext);
+    const { alert, showAlert } = alertContext;
 
     const handleOnChange = (e) => {
         setUser({
@@ -20,10 +22,30 @@ const Register = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
+
+        if (user.name.trim() === '' || user.email.trim() === '' || user.password.trim() === '' || user.confirm.trim() === '' ) {
+            showAlert("Complete all the fields", "alert-error");
+        }
+
+        if (user.password.length < 6) {
+            showAlert("Password must be at least 6 character", "alert-error");
+        }
+
+        if (user.password !== user.confirm) {
+            showAlert("Passwords is not equals", "alert-error");
+        }
+
     }
 
     return ( 
         <div className="form-user">
+            {
+                alert && (
+                    <div className={`alert ${alert.category}`}>
+                        {alert.msg}
+                    </div>
+                )
+            }
             <div className="container-form shadow-dark">
                 <h1>New account</h1>
                 <form

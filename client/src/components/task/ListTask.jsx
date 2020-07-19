@@ -1,44 +1,54 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Task from './Task';
+import projectContext from './../../context/project/projectContext';
+import taskContext from './../../context/task/taskContext';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+
 
 const ListTask = () => {
-    const tasks = [
-        { 
-            name: 'task 1 ',
-            state: true
-        },
-        { 
-            name: 'task 2 ',
-            state: true
-        },{ 
-            name: 'task 3 ',
-            state: false
-        },{ 
-            name: 'task 4 ',
-            state: true
-        },
-    ]
+    const projectsContext = useContext(projectContext);
+    const { selectedProject, deleteProject } = projectsContext;
+
+    const tasksContext = useContext(taskContext);
+    const { projectTasks } = tasksContext;
+
+    const handleOnClick = () => {
+        deleteProject(selectedProject.id)
+    }
+
+
+    if (!selectedProject) return <h2>select one project</h2>;
 
     return (
         <div>
-            <h2>Project: Project 1</h2>
+            <h2>{selectedProject.name}</h2>
             <button
                 type="button"
                 className="btn btn-danger"
+                onClick={handleOnClick}
             >
                 Delete project &times;
             </button>
             <ul className="list-task">
                 {
-                    tasks.length === 0 
+                    projectTasks.length === 0 
                     ?(<li className="task"><p>No tasks</p></li>)
                     :
-                    tasks.map((task)=>(
-                        <Task task={task}/>
-                    ))
+                    <TransitionGroup>
+                        {
+                            projectTasks.map((task)=> (
+                                <CSSTransition 
+                                    key={task.id}
+                                    timeout={200}
+                                    classNames="Task"
+                                >
+                                    <Task task={task}/>
+                                </CSSTransition>
+                            ))
+                        }
+                    </TransitionGroup>
                 }
             </ul>
-            
         </div>
     );
 };

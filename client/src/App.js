@@ -7,18 +7,23 @@ import Projects from './components/project/Projects'
 
 //Context 
 import ProjectState from './context/project/projectState';
-
+import TaskState from './context/task/taskState';
+import AlertState from './context/alert/alertState';
 
 const App = () => {
     return (
         <ProjectState>
-            <Router>
-                <Switch>
-                    <Route exact path="/" component={Login}/>
-                    <Route exact path="/register" component={Register}/>
-                    <Route exact path="/project" component={Projects}/>
-                </Switch>
-            </Router>
+            <TaskState>
+                < AlertState >
+                    <Router>
+                        <Switch>
+                            <Route exact path="/" component={Login}/>
+                            <Route exact path="/register" component={Register}/>
+                            <Route exact path="/project" component={Projects}/>
+                        </Switch>
+                    </Router>
+                </AlertState>
+            </TaskState>
         </ProjectState>
     );
 }

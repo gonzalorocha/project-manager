@@ -9,7 +9,7 @@ const NewProject = () => {
     });
     //Context
     const projectsContext = useContext(projectContext);
-    const { visible, seeForm } = projectsContext;
+    const { visible, errorForm, seeForm, addProject, seeError } = projectsContext;
 
     const handleOnChange = (e) => {
         saveProject({
@@ -20,6 +20,18 @@ const NewProject = () => {
 
     const handleOnSubmit = (e) => {
         e.preventDefault();
+
+        if (project.name === '') {
+            seeError();
+            return;
+        }
+
+        addProject(project);
+
+        saveProject({
+            name: ''
+        })
+
     }
 
     return ( 
@@ -52,6 +64,11 @@ const NewProject = () => {
                             value="Add project"
                         />
                     </form>
+                )
+            }
+            {
+                errorForm && (
+                    <p className="error message">Complete all the fields</p>
                 )
             }
         </Fragment>

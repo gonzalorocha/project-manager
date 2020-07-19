@@ -4,7 +4,6 @@ import Bar from '../layout/Bar'
 import FormTask from '../task/FormTask';
 import ListTask from '../task/ListTask';
 
-
 const Projects = () => {
     return ( 
         <div className="container-app">
