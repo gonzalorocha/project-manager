@@ -16,7 +16,7 @@ export default (state, action) => {
         case TASK_PROJECT: 
         return {
             ...state, //copy of the state
-            projectTasks: state.tasks.filter(t => t.projectId === action.payload)
+            projectTasks: action.payload
         } 
         case ADD_TASK: 
         return {
@@ -32,12 +32,12 @@ export default (state, action) => {
         case DELETE_TASK: 
         return {
             ...state, //copy of the state
-            tasks: state.tasks.filter( t => t.id !== action.payload)
+            tasks: state.tasks.filter( t => t._id !== action.payload)
         } 
         case UPDATE_TASK: 
         return {
             ...state, //copy of the state
-            tasks: state.tasks.map(task => task.id === action.payload.id ? 
+            tasks: state.tasks.map(task => task._id === action.payload.id ? 
                 task = action.payload
                 : task),
             selectedTask: null
@@ -45,7 +45,7 @@ export default (state, action) => {
         case STATE_TASK: 
         return {
             ...state, //copy of the state
-            tasks: state.tasks.map(task => task.id === action.payload.id ? 
+            tasks: state.tasks.map(task => task._id === action.payload.id ? 
                                         task = action.payload
                                         : task)
         } 

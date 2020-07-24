@@ -1,7 +1,8 @@
 import React, { useReducer } from 'react';
 import TaskContext from './taskContext';
 import TaskReducer from './taskReducer';
-import {v4 as uuid} from 'uuid'
+import clientAxios from './../../config/axios'
+
 
 import { 
     TASK_PROJECT,
@@ -13,61 +14,10 @@ import {
     ACTUAL_TASK,
     CLEAN_TASK
 } from './../../types';
-import Task from '../../components/task/Task';
 
 const TaskState = props => {
-    const tasks = [
-        { 
-            id:1, 
-            projectId: 1,
-            name: 'task 1 ',
-            state: true
-        },
-        { 
-            id:2, 
-            projectId: 2,
-            name: 'task 2 ',
-            state: true
-        },{ 
-            id:3, 
-            projectId: 2,
-            name: 'task 3 ',
-            state: false
-        },{ 
-            id:4, 
-            projectId: 3,
-            name: 'task 4 ',
-            state: true
-        },{ 
-            id:5, 
-            projectId: 2,
-            name: 'task 5 ',
-            state: true
-        },{ 
-            id:6, 
-            projectId: 2,
-            name: 'task 6 ',
-            state: true
-        },{ 
-            id:7, 
-            projectId: 3,
-            name: 'task 7 ',
-            state: true
-        },{ 
-            id:8, 
-            projectId: 3,
-            name: 'task 8 ',
-            state: true
-        },{ 
-            id: 9, 
-            projectId: 3,
-            name: 'task 9',
-            state: true
-        }
-    ]
-    
     const initialState = {
-        tasks: tasks,
+        tasks: [],
         projectTasks: [],
         error: false,
         selectedTask: null
@@ -76,19 +26,28 @@ const TaskState = props => {
     const [ state, dispatch ] = useReducer(TaskReducer, initialState);
 
     //Get task
-    const getTasks = (projectId) => {
-        dispatch({
-            type: TASK_PROJECT,
-            payload: projectId
-        })
+    const getTasks = async(projectId) => {
+        try {
+            const res = await clientAxios.get(`api/task/${projectId}`);
+            console.log(res.data.tasks)
+            dispatch({
+                type: TASK_PROJECT,
+                payload: res.data.tasks
+            })
+        } catch(err) {
+            console.log(err)
+        }
     } 
 
-    const addTask = (task) => {
-        task.id = uuid;
-        dispatch({
-            type: ADD_TASK,
-            payload: task
-        })
+    const addTask = async(task) => {
+        try {
+            const res = await clientAxios.post('api/task', task);
+            dispatch({
+                type: ADD_TASK,
+                payload: res.data
+            })
+        } catch(err) {
+        }
     }
 
     const errorTask = () => {
@@ -97,11 +56,16 @@ const TaskState = props => {
         })
     }
 
-    const deleteTask = (taskId) => {
-        dispatch({
-            type: DELETE_TASK,
-            payload: taskId
-        })
+    const deleteTask = async(taskId) => {
+        try {
+            await clientAxios.delete('api/task/${taskId}');
+             dispatch({
+                 type: DELETE_TASK,
+                 payload: taskId
+             })
+        } catch(err) {
+            console.log(err)
+        }
     }
 
     const updateTask = (task) => {

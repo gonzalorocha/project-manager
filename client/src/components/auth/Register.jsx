@@ -1,8 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {Link} from 'react-router-dom';
 import AlertContext from "./../../context/alert/alertContext";
+import AuthContext from "./../../context/auth/authContext";
 
-const Register = () => {
+
+const Register = (props) => {
     const [ user, setUser ] = useState({
         name: '',
         email: '',
@@ -12,6 +14,20 @@ const Register = () => {
 
     const alertContext = useContext(AlertContext);
     const { alert, showAlert } = alertContext;
+
+    const authContext = useContext(AuthContext);
+    const { message, auth, registerUser } = authContext;
+
+    useEffect(() => {
+        if (auth) {
+            props.history.push("/project");
+        }
+        if (message) {
+            showAlert(message.msg, message.category);
+        }
+            
+
+    },[message, auth, props.history])
 
     const handleOnChange = (e) => {
         setUser({
@@ -23,7 +39,9 @@ const Register = () => {
     const onSubmit = (e) => {
         e.preventDefault();
 
-        if (user.name.trim() === '' || user.email.trim() === '' || user.password.trim() === '' || user.confirm.trim() === '' ) {
+        const { name, email, password, confirm } = user; 
+
+        if (name.trim() === '' || email.trim() === '' || password.trim() === '' || confirm.trim() === '' ) {
             showAlert("Complete all the fields", "alert-error");
         }
 
@@ -34,6 +52,13 @@ const Register = () => {
         if (user.password !== user.confirm) {
             showAlert("Passwords is not equals", "alert-error");
         }
+
+
+        registerUser({
+            name,
+            email,
+            password
+        });
 
     }
 

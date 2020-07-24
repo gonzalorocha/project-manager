@@ -1,11 +1,29 @@
-import React, { useState } from 'react';
-import {Link} from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react';
+import {Link} from 'react-router-dom';
+import AlertContext from "./../../context/alert/alertContext";
+import AuthContext from "./../../context/auth/authContext";
 
-const Login = () => {
+const Login = (props) => {
     const [ user, setUser ] = useState({
         email: '',
         password: ''
-    })
+    });
+
+    const alertContext = useContext(AlertContext);
+    const { alert, showAlert } = alertContext;
+
+    const authContext = useContext(AuthContext);
+    const { message, auth, login } = authContext;
+    useEffect(() => {
+        if (auth) {
+            props.history.push("/project");
+        }
+        if (message) {
+            showAlert(message.msg, message.category);
+        }
+    }, [message, auth, props.history]);
+
+ 
 
     const handleOnChange = (e) => {
         setUser({
@@ -17,10 +35,22 @@ const Login = () => {
     const onSubmit = (e) => {
         e.preventDefault();
 
+        if (user.email.trim() === '' || user.password.trim() === '') {
+            showAlert("Complete all the fields", "alert-error");
+        }
+
+        login(user);
     }
 
     return ( 
         <div className="form-user">
+            {
+                alert && (
+                    <div className={`alert ${alert.category}`}>
+                        {alert.msg}
+                    </div>
+                )
+            }
             <div className="container-form shadow-dark">
                 <h1>Login</h1>
                 <form

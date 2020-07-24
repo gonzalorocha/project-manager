@@ -7,7 +7,7 @@ const Task = ({task}) => {
     const { deleteTask, getTasks, changeStateTask, saveActualTask } = tasksContext;
 
     const handleDeleteClick = () => {
-        deleteTask(task.id);
+        deleteTask(task._id);
         getTasks(task.projectId);
     }
 

@@ -27,7 +27,7 @@ exports.authUser = async(req, res) => {
 
         if (!passValid) {
             return res.status(400).json({
-                msg: "The email or password is not exist"
+                msg: "The email or password is incorrect"
             });
         }
 
@@ -45,10 +45,19 @@ exports.authUser = async(req, res) => {
                 token
             });
         });
-
-
     } catch(err) {
         console.log(err);
     }
+}
+//Get the authenticated user
+exports.authenticated = async(req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        res.json({user})
+    } catch(err){
+        console.log(err);
+        res.status(500).json({msg: "There was an error"})
+    }
+
 
 }

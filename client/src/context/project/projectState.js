@@ -1,26 +1,10 @@
 import React, { useReducer } from 'react';
-
-import {v4 as uuid} from 'uuid'
 import projectContext from './projectContext';
 import projectReducer from './projectReducer';
 import { FORM_PROJECT, GET_PROJECTS, ADD_PROJECTS, ERROR_FORM, ACTUAL_PROJECT, DELETE_PROJECT } from '../../types';
+import clientAxios from './../../config/axios'
 
 const ProjectState = props => {
-
-    const projectsList = [
-        {
-            id: 1,
-            name: 'project 1'
-        },
-        {
-            id: 2,
-            name: 'project 2'
-        },
-        {
-            id: 3,
-            name: 'project 3'
-        },
-    ] 
 
     const initialState = {
         projects: [],
@@ -40,19 +24,30 @@ const ProjectState = props => {
         })
     }
 
-    const getProject = () => {
-        dispatch({
-            type: GET_PROJECTS,
-            payload: projectsList
-        })
+    const getProject = async() => {
+        try{
+            const res = await clientAxios.get('api/project');
+            console.log(res);
+            dispatch({
+                type: GET_PROJECTS,
+                payload: res.data.projects
+            })
+        } catch(err) {
+            console.log(err);
+        }
+
     }
 
-    const addProject = (project) => {
-        project.id = uuid;
-        dispatch({
-            type: ADD_PROJECTS,
-            payload: project
-        })
+    const addProject = async(project) => {
+        try {
+            const res = await clientAxios.post('api/project', project);
+            dispatch({
+                type: ADD_PROJECTS,
+                payload: res.data
+            })
+        } catch(err) {
+            console.log(err);
+        }
     }   
 
     const seeError = () => {
@@ -68,11 +63,16 @@ const ProjectState = props => {
         })
     }
 
-    const deleteProject = (id) => {
-        dispatch({
-            type: DELETE_PROJECT,
-            payload: id
-        })
+    const deleteProject = async(id) => {
+        try {
+            await clientAxios.delete(`api/project/${id}`);
+            dispatch({
+                type: DELETE_PROJECT,
+                payload: id
+            })
+        } catch(err) {
+            console.log(err);
+        }
     }
 
     return (

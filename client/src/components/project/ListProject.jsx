@@ -9,7 +9,8 @@ const ListProject = () => {
 
     useEffect(()=>{
         getProject();
-    },[])
+        
+    }, [projects])
 
     if (projects.length === 0) {
         return <p>No projects</p>;
@@ -19,7 +20,7 @@ const ListProject = () => {
         <ul className="list-project">
             {
                 projects.map((p)=> (
-                    <Project key={p.id} project={p} />
+                    <Project key={p._id} project={p} />
                 ))
             }
         </ul>

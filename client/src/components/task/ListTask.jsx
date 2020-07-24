@@ -13,7 +13,7 @@ const ListTask = () => {
     const { projectTasks } = tasksContext;
 
     const handleOnClick = () => {
-        deleteProject(selectedProject.id)
+        deleteProject(selectedProject._id)
     }
 
 
@@ -38,7 +38,7 @@ const ListTask = () => {
                         {
                             projectTasks.map((task)=> (
                                 <CSSTransition 
-                                    key={task.id}
+                                    key={task._id}
                                     timeout={200}
                                     classNames="Task"
                                 >

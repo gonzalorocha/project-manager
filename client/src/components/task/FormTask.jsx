@@ -42,7 +42,7 @@ const FormTask = () => {
             updateTask(task);
             cleanSelectedTask();
         } else {
-            task.projectId = selectedProject.id;
+            task.projectId = selectedProject._id;
             addTask(task);
         }
         setTask({
@@ -50,7 +50,7 @@ const FormTask = () => {
             name: '',
             state: false,
         })
-        getTasks(selectedProject.id);
+        getTasks(selectedProject._id);
     }
 
     return (

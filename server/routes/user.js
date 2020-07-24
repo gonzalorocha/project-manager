@@ -4,7 +4,7 @@ const router = express.Router();
 const userController = require('./../controllers/userController');
 const { check } = require('express-validator');
 
-//api/users
+//api/user
 router.post(
   "/",
   [
